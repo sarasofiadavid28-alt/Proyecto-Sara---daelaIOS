@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="daedalOS Clone - Sistema operativo de escritorio en el navegador">
+  <meta name="theme-color" content="#000000">
+  
+  <!-- Título de la página (aparece en la pestaña del navegador) -->
+  <title>daedalOS</title>
+  
+  <!-- Enlace al archivo de estilos CSS externo -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ============================================
+       ESCRITORIO PRINCIPAL - <main>
+       Elemento semántico que contiene el contenido
+       principal del sistema operativo simulado.
+       El role="application" indica que es una app
+       interactiva, no solo contenido de lectura.
+       ============================================ -->
+  <main class="desktop" role="application" aria-label="Sistema operativo de escritorio">
+    
+    <!-- ==========================================
+         ICONOS DEL ESCRITORIO - <section>
+         Sección que agrupa todos los accesos directos
+         del escritorio. Usamos <section> porque es
+         un grupo temático de contenido relacionado.
+         ========================================== -->
+    <section class="desktop__icons" aria-label="Accesos directos del escritorio">
+      
+      <!-- ========================================
+           ICONO DEL ESCRITORIO - <figure>
+           Cada icono usa <figure> porque representa
+           una unidad de contenido autocontenido
+           (imagen + etiqueta). <figcaption> proporciona
+           el nombre accesible del icono.
+           ======================================== -->
+      
+      <!-- Icono: Mi PC - Acceso al explorador de archivos -->
+      <figure class="desktop-icon" data-app="explorer" tabindex="0" role="button" aria-label="Abrir Mi PC">
+        <img 
+          src="images/icons/computer.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <!-- figcaption: Etiqueta semántica para el nombre del icono -->
+        <figcaption class="desktop-icon__name">My PC</figcaption>
+      </figure>
+      
+      <!-- Icono: Carpeta Public - Carpeta compartida -->
+      <figure class="desktop-icon" data-app="public-folder" tabindex="0" role="button" aria-label="Abrir carpeta Public">
+        <img 
+          src="images/icons/folder.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <figcaption class="desktop-icon__name">Public</figcaption>
+      </figure>
+      
+      <!-- Icono: Blog Posts - Documentos del blog -->
+      <figure class="desktop-icon" data-app="blog" tabindex="0" role="button" aria-label="Abrir Blog Posts">
+        <img 
+          src="images/icons/document.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <figcaption class="desktop-icon__name">Blog Posts</figcaption>
+      </figure>
+      
+      <!-- Icono: Terminal - Línea de comandos -->
+      <figure class="desktop-icon" data-app="terminal" tabindex="0" role="button" aria-label="Abrir Terminal">
+        <img 
+          src="images/icons/terminal.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <figcaption class="desktop-icon__name">Terminal</figcaption>
+      </figure>
+      
+      <!-- Icono: Browser - Navegador web -->
+      <figure class="desktop-icon" data-app="browser" tabindex="0" role="button" aria-label="Abrir Browser">
+        <img 
+          src="images/icons/browser.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <figcaption class="desktop-icon__name">Browser</figcaption>
+      </figure>
+      
+      <!-- Icono: Papelera de reciclaje - Archivos eliminados -->
+      <figure class="desktop-icon" data-app="recycle-bin" tabindex="0" role="button" aria-label="Abrir Papelera de reciclaje">
+        <img 
+          src="images/icons/recycle-bin.jpg" 
+          alt="" 
+          class="desktop-icon__image"
+          aria-hidden="true"
+        >
+        <figcaption class="desktop-icon__name">Recycle Bin</figcaption>
+      </figure>
+      
+    </section><!-- Fin de sección de iconos del escritorio -->
+
+    <!-- ==========================================
+         VENTANA: EXPLORADOR DE ARCHIVOS - <article>
+         Usamos <article> porque representa una unidad
+         de contenido independiente y autocontenido.
+         Cada ventana es un componente completo que
+         podría existir por sí solo.
+         role="dialog" indica que es una ventana modal.
+         ========================================== -->
+    <article 
+      class="window open" 
+      id="explorer-window" 
+      style="top: 60px; left: 120px;"
+      role="dialog"
+      aria-labelledby="explorer-title"
+      aria-describedby="explorer-content"
+    >
+      
+      <!-- ========================================
+           BARRA DE TÍTULO - <header>
+           El <header> contiene información introductoria
+           de la ventana: icono, título y controles.
+           ======================================== -->
+      <header class="window__titlebar">
+        <!-- Lado izquierdo: icono y título de la ventana -->
+        <div class="window__titlebar-left">
+          <img 
+            src="images/icons/folder.jpg" 
+            alt="" 
+            class="window__icon"
+            aria-hidden="true"
+          >
+          <!-- h1 dentro del article para el título de la ventana -->
+          <h1 id="explorer-title" class="window__title">File Explorer - My PC</h1>
+        </div>
+        
+        <!-- Lado derecho: grupo de botones de control de ventana -->
+        <div class="window__controls" role="group" aria-label="Controles de ventana">
+          <!-- Botón minimizar - reduce la ventana a la barra de tareas -->
+          <button class="window__control-btn" title="Minimize" aria-label="Minimizar ventana">
+            <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+              <rect x="0" y="4.5" width="10" height="1"/>
+            </svg>
+          </button>
+          
+          <!-- Botón maximizar - expande la ventana a pantalla completa -->
+          <button class="window__control-btn" title="Maximize" aria-label="Maximizar ventana">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+              <rect x="0.5" y="0.5" width="9" height="9"/>
+            </svg>
+          </button>
+          
+          <!-- Botón cerrar - cierra la ventana completamente -->
+          <button class="window__control-btn window__control-btn--close" title="Close" aria-label="Cerrar ventana">
+            <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+              <path d="M0 0L10 10M10 0L0 10" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </button>
+        </div>
+      </header><!-- Fin header de la ventana -->
+      
+      <!-- ========================================
+           BARRA DE HERRAMIENTAS - <nav>
+           Usamos <nav> para la navegación del explorador
+           ya que contiene botones de navegación (atrás,
+           adelante, subir) y la barra de dirección.
+           ======================================== -->
+      <nav class="explorer-toolbar" aria-label="Navegación del explorador">
+        <!-- Grupo de botones de navegación -->
+        <div class="explorer-toolbar__nav" role="group" aria-label="Botones de navegación">
+          <!-- Botón atrás - vuelve a la ubicación anterior -->
+          <button class="explorer-toolbar__btn" disabled title="Back" aria-label="Volver atrás">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          
+          <!-- Botón adelante - avanza a la ubicación siguiente -->
+          <button class="explorer-toolbar__btn" disabled title="Forward" aria-label="Ir adelante">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+          
+          <!-- Botón subir nivel - sube al directorio padre -->
+          <button class="explorer-toolbar__btn" title="Up" aria-label="Subir un nivel">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 15l-6-6-6 6"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Barra de dirección - muestra la ruta actual -->
+        <div class="explorer-toolbar__address" role="navigation" aria-label="Ruta actual">
+          <svg class="explorer-toolbar__address-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          <span class="explorer-toolbar__address-text">This PC</span>
+        </div>
+      </nav><!-- Fin nav de herramientas -->
+      
+      <!-- ========================================
+           CONTENIDO DE LA VENTANA - <div>
+           Contenedor del contenido principal
+           ======================================== -->
+      <div class="window__content" id="explorer-content">
+        <div class="explorer-content">
+          
+          <!-- ====================================
+               PANEL LATERAL - <aside>
+               Usamos <aside> porque es contenido
+               relacionado pero secundario/complementario
+               al contenido principal (los archivos).
+               Contiene navegación rápida a ubicaciones.
+               ==================================== -->
+          <aside class="explorer-sidebar" aria-label="Accesos rápidos">
+            <!-- Navegación del sidebar -->
+            <nav class="explorer-sidebar__nav" aria-label="Ubicaciones">
+              
+              <!-- Item: Este PC (activo) -->
+              <a href="#" class="explorer-sidebar__item active" aria-current="location">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                <span class="explorer-sidebar__text">This PC</span>
+              </a>
+              
+              <!-- Item: Documentos -->
+              <a href="#" class="explorer-sidebar__item">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span class="explorer-sidebar__text">Documents</span>
+              </a>
+              
+              <!-- Item: Imágenes -->
+              <a href="#" class="explorer-sidebar__item">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span class="explorer-sidebar__text">Pictures</span>
+              </a>
+              
+              <!-- Item: Música -->
+              <a href="#" class="explorer-sidebar__item">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <circle cx="18" cy="16" r="3"/>
+                </svg>
+                <span class="explorer-sidebar__text">Music</span>
+              </a>
+              
+              <!-- Item: Videos -->
+              <a href="#" class="explorer-sidebar__item">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polygon points="23 7 16 12 23 17 23 7"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span class="explorer-sidebar__text">Videos</span>
+              </a>
+              
+              <!-- Item: Red -->
+              <a href="#" class="explorer-sidebar__item">
+                <svg class="explorer-sidebar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span class="explorer-sidebar__text">Network</span>
+              </a>
+              
+            </nav>
+          </aside><!-- Fin aside del sidebar -->
+          
+          <!-- ====================================
+               ÁREA DE ARCHIVOS - <section>
+               Sección principal que muestra los
+               archivos y carpetas. Usamos <section>
+               porque es un grupo temático de contenido.
+               ==================================== -->
+          <section class="explorer-files" aria-label="Archivos y carpetas">
+            
+            <!-- ================================
+                 ARCHIVO/CARPETA - <article>
+                 Cada item de archivo usa <article>
+                 porque es una unidad de contenido
+                 independiente y autocontenido.
+                 ================================ -->
+            
+            <!-- Disco Local C: -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir Local Disk C">
+              <svg class="file-item__icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <line x1="6" y1="8" x2="18" y2="8"/>
+                <line x1="6" y1="12" x2="14" y2="12"/>
+              </svg>
+              <span class="file-item__name">Local Disk (C:)</span>
+            </article>
+            
+            <!-- Disco Local D: -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir Local Disk D">
+              <svg class="file-item__icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <line x1="6" y1="8" x2="18" y2="8"/>
+                <line x1="6" y1="12" x2="14" y2="12"/>
+              </svg>
+              <span class="file-item__name">Local Disk (D:)</span>
+            </article>
+            
+            <!-- Carpeta Desktop -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Desktop">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Desktop</span>
+            </article>
+            
+            <!-- Carpeta Documents -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Documents">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Documents</span>
+            </article>
+            
+            <!-- Carpeta Downloads -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Downloads">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Downloads</span>
+            </article>
+            
+            <!-- Carpeta Pictures -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Pictures">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Pictures</span>
+            </article>
+            
+            <!-- Carpeta Videos -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Videos">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Videos</span>
+            </article>
+            
+            <!-- Carpeta Music -->
+            <article class="file-item" tabindex="0" role="button" aria-label="Abrir carpeta Music">
+              <img src="images/icons/folder.jpg" alt="" class="file-item__icon" aria-hidden="true">
+              <span class="file-item__name">Music</span>
+            </article>
+            
+          </section><!-- Fin sección de archivos -->
+          
+        </div>
+      </div><!-- Fin contenido de la ventana -->
+      
+    </article><!-- Fin article de ventana explorador -->
+
+    <!-- ==========================================
+         MENÚ DE INICIO - <aside>
+         Usamos <aside> porque es contenido
+         complementario que aparece sobre el contenido
+         principal. Es un panel flotante relacionado
+         pero independiente del escritorio.
+         ========================================== -->
+    <aside 
+      class="start-menu" 
+      id="start-menu"
+      role="menu"
+      aria-label="Menú de inicio"
+      aria-hidden="true"
+    >
+      
+      <!-- ========================================
+           CABECERA DEL MENÚ - <header>
+           Contiene el campo de búsqueda que es
+           información introductoria del menú.
+           ======================================== -->
+      <header class="start-menu__header">
+        <!-- Campo de búsqueda con label implícito via aria-label -->
+        <input 
+          type="search" 
+          class="start-menu__search" 
+          placeholder="Type here to search"
+          aria-label="Buscar aplicaciones y archivos"
+          autocomplete="off"
+        >
+      </header>
+      
+      <!-- ========================================
+           LISTA DE APLICACIONES - <nav>
+           Usamos <nav> porque es navegación hacia
+           diferentes aplicaciones del sistema.
+           ======================================== -->
+      <nav class="start-menu__apps" aria-label="Aplicaciones">
+        
+        <!-- ====================================
+             SECCIÓN: ANCLADOS
+             Grupo de apps ancladas por el usuario.
+             Usamos <section> con heading para
+             agrupar contenido temáticamente.
+             ==================================== -->
+        <section class="start-menu__section" aria-labelledby="pinned-title">
+          <h2 id="pinned-title" class="start-menu__section-title">Pinned</h2>
+          
+          <!-- Lista de apps ancladas usando <ul> semántico -->
+          <ul class="start-menu__list" role="menu">
+            
+            <!-- App: File Explorer -->
+            <li role="none">
+              <a href="#" class="start-menu__item" data-app="explorer" role="menuitem">
+                <img 
+                  src="images/icons/folder.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">File Explorer</span>
+              </a>
+            </li>
+            
+            <!-- App: Terminal -->
+            <li role="none">
+              <a href="#" class="start-menu__item" data-app="terminal" role="menuitem">
+                <img 
+                  src="images/icons/terminal.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">Terminal</span>
+              </a>
+            </li>
+            
+            <!-- App: Browser -->
+            <li role="none">
+              <a href="#" class="start-menu__item" data-app="browser" role="menuitem">
+                <img 
+                  src="images/icons/browser.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">Browser</span>
+              </a>
+            </li>
+            
+            <!-- App: Documents -->
+            <li role="none">
+              <a href="#" class="start-menu__item" data-app="documents" role="menuitem">
+                <img 
+                  src="images/icons/document.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">Documents</span>
+              </a>
+            </li>
+            
+          </ul>
+        </section>
+        
+        <!-- ====================================
+             SECCIÓN: RECOMENDADOS
+             Archivos y carpetas recientes/sugeridos.
+             ==================================== -->
+        <section class="start-menu__section" aria-labelledby="recommended-title">
+          <h2 id="recommended-title" class="start-menu__section-title">Recommended</h2>
+          
+          <!-- Lista de items recomendados -->
+          <ul class="start-menu__list" role="menu">
+            
+            <!-- Archivo reciente: README.md -->
+            <li role="none">
+              <a href="#" class="start-menu__item" role="menuitem">
+                <img 
+                  src="images/icons/document.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">README.md</span>
+              </a>
+            </li>
+            
+            <!-- Carpeta reciente: Projects -->
+            <li role="none">
+              <a href="#" class="start-menu__item" role="menuitem">
+                <img 
+                  src="images/icons/folder.jpg" 
+                  alt="" 
+                  class="start-menu__item-icon"
+                  aria-hidden="true"
+                >
+                <span class="start-menu__item-name">Projects</span>
+              </a>
+            </li>
+            
+          </ul>
+        </section>
+        
+      </nav><!-- Fin nav de aplicaciones -->
+      
+    </aside><!-- Fin aside del menú de inicio -->
+
+    <!-- ==========================================
+         BARRA DE TAREAS - <footer>
+         Usamos <footer> porque es un pie de página
+         persistente que contiene información de
+         navegación y estado del sistema. Es el
+         "footer" de la aplicación de escritorio.
+         ========================================== -->
+    <footer class="taskbar" role="toolbar" aria-label="Barra de tareas">
+      
+      <!-- ========================================
+           SECCIÓN IZQUIERDA: BOTÓN DE INICIO
+           ======================================== -->
+      <div class="taskbar__left">
+        <button 
+          class="start-button" 
+          id="start-button"
+          title="Start"
+          aria-label="Abrir menú de inicio"
+          aria-expanded="false"
+          aria-controls="start-menu"
+          aria-haspopup="menu"
+        >
+          <!-- Icono de Windows (cuadrícula 2x2) -->
+          <svg class="start-button__icon" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
+            <rect x="2" y="2" width="9" height="9" rx="1"/>
+            <rect x="13" y="2" width="9" height="9" rx="1"/>
+            <rect x="2" y="13" width="9" height="9" rx="1"/>
+            <rect x="13" y="13" width="9" height="9" rx="1"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- ========================================
+           SECCIÓN CENTRAL: APLICACIONES ABIERTAS
+           Usamos <nav> porque son enlaces a las
+           ventanas/aplicaciones abiertas.
+           ======================================== -->
+      <nav class="taskbar__center" aria-label="Aplicaciones en ejecución">
+        
+        <!-- App en taskbar: File Explorer (activa) -->
+        <button class="taskbar-item active" title="File Explorer" aria-label="File Explorer - ventana abierta" aria-pressed="true">
+          <img 
+            src="images/icons/folder.jpg" 
+            alt="" 
+            class="taskbar-item__icon"
+            aria-hidden="true"
+          >
+        </button>
+        
+        <!-- App en taskbar: Terminal -->
+        <button class="taskbar-item" title="Terminal" aria-label="Abrir Terminal" aria-pressed="false">
+          <img 
+            src="images/icons/terminal.jpg" 
+            alt="" 
+            class="taskbar-item__icon"
+            aria-hidden="true"
+          >
+        </button>
+        
+        <!-- App en taskbar: Browser -->
+        <button class="taskbar-item" title="Browser" aria-label="Abrir Browser" aria-pressed="false">
+          <img 
+            src="images/icons/browser.jpg" 
+            alt="" 
+            class="taskbar-item__icon"
+            aria-hidden="true"
+          >
+        </button>
+        
+      </nav>
+      
+      <!-- ========================================
+           SECCIÓN DERECHA: BANDEJA DEL SISTEMA
+           Contiene indicadores de estado y reloj.
+           ======================================== -->
+      <aside class="taskbar__right" aria-label="Bandeja del sistema">
+        <div class="system-tray">
+          
+          <!-- Iconos de estado del sistema -->
+          <div class="system-tray__icons" role="group" aria-label="Indicadores de estado">
+            <!-- Icono WiFi - indica conexión de red -->
+            <svg class="system-tray__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="WiFi conectado" role="img">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+              <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+            
+            <!-- Icono Volumen - control de audio -->
+            <svg class="system-tray__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Volumen activo" role="img">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            
+            <!-- Icono Batería - nivel de carga -->
+            <svg class="system-tray__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Batería al 80%" role="img">
+              <rect x="1" y="6" width="18" height="12" rx="2" ry="2"/>
+              <line x1="23" y1="10" x2="23" y2="14"/>
+              <rect x="3" y="8" width="12" height="8" fill="currentColor" opacity="0.3"/>
+            </svg>
+          </div>
+          
+          <!-- ================================
+               RELOJ DEL SISTEMA - <time>
+               Usamos <time> porque representa
+               una fecha/hora específica.
+               ================================ -->
+          <div class="system-tray__clock" aria-live="polite" aria-atomic="true">
+            <time class="system-tray__time" id="clock-time" datetime="">12:00 PM</time>
+            <time class="system-tray__date" id="clock-date" datetime="">3/6/2026</time>
+          </div>
+          
+        </div>
+      </aside>
+      
+    </footer><!-- Fin footer de la barra de tareas -->
+
+  </main><!-- Fin main del escritorio -->
+
+ 
