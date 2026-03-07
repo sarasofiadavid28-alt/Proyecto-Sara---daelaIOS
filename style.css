@@ -1,37 +1,4 @@
-/* ============================================
-   daedalOS Clone - Desktop Operating System CSS
-   ============================================
-   
-   Este archivo contiene todos los estilos para recrear
-   una interfaz de escritorio similar a Windows/daedalOS.
-   
-   NOTA SOBRE SEMÁNTICA HTML:
-   Este CSS está diseñado para trabajar con HTML semántico:
-   - <main> para el escritorio principal
-   - <section> para grupos de contenido (iconos, archivos)
-   - <article> para ventanas y elementos independientes
-   - <figure> con <figcaption> para iconos del escritorio
-   - <nav> para navegación (sidebar, taskbar apps)
-   - <aside> para contenido complementario (menú inicio, bandeja)
-   - <header> y <footer> para encabezados y pies
-   - <time> para fechas y horas del reloj
-   - <ul>/<li> para listas de navegación
-   
-   Estructura del archivo:
-   1. Variables CSS (colores, fuentes, tamaños)
-   2. Reset y estilos base
-   3. Escritorio (desktop) - <main>
-   4. Iconos del escritorio - <figure>
-   5. Barra de tareas (taskbar) - <footer>
-   6. Menú de inicio (start menu) - <aside>
-   7. Ventanas (windows) - <article>
-   8. Utilidades y animaciones
-   ============================================ */
 
-/* ============================================
-   1. VARIABLES CSS
-   Define colores, fuentes y tamaños reutilizables
-   ============================================ */
 :root {
   /* Colores principales del sistema */
   --color-background: #000000;          /* Fondo del escritorio */
