@@ -1,0 +1,1107 @@
+/* ============================================
+   daedalOS Clone - Desktop Operating System CSS
+   ============================================
+   
+   Este archivo contiene todos los estilos para recrear
+   una interfaz de escritorio similar a Windows/daedalOS.
+   
+   NOTA SOBRE SEMÁNTICA HTML:
+   Este CSS está diseñado para trabajar con HTML semántico:
+   - <main> para el escritorio principal
+   - <section> para grupos de contenido (iconos, archivos)
+   - <article> para ventanas y elementos independientes
+   - <figure> con <figcaption> para iconos del escritorio
+   - <nav> para navegación (sidebar, taskbar apps)
+   - <aside> para contenido complementario (menú inicio, bandeja)
+   - <header> y <footer> para encabezados y pies
+   - <time> para fechas y horas del reloj
+   - <ul>/<li> para listas de navegación
+   
+   Estructura del archivo:
+   1. Variables CSS (colores, fuentes, tamaños)
+   2. Reset y estilos base
+   3. Escritorio (desktop) - <main>
+   4. Iconos del escritorio - <figure>
+   5. Barra de tareas (taskbar) - <footer>
+   6. Menú de inicio (start menu) - <aside>
+   7. Ventanas (windows) - <article>
+   8. Utilidades y animaciones
+   ============================================ */
+
+/* ============================================
+   1. VARIABLES CSS
+   Define colores, fuentes y tamaños reutilizables
+   ============================================ */
+:root {
+  /* Colores principales del sistema */
+  --color-background: #000000;          /* Fondo del escritorio */
+  --color-taskbar: rgba(25, 25, 25, 0.95); /* Barra de tareas semi-transparente */
+  --color-taskbar-hover: rgba(60, 60, 60, 0.8); /* Hover en elementos de taskbar */
+  --color-window-bg: #1a1a1a;           /* Fondo de ventanas */
+  --color-window-border: #3d3d3d;       /* Borde de ventanas */
+  --color-titlebar: #2d2d2d;            /* Barra de título de ventana */
+  --color-start-menu: rgba(30, 30, 30, 0.98); /* Menú de inicio */
+  
+  /* Colores de texto */
+  --color-text-primary: #ffffff;        /* Texto principal */
+  --color-text-secondary: #a0a0a0;      /* Texto secundario */
+  --color-text-muted: #6b6b6b;          /* Texto atenuado */
+  
+  /* Colores de acento */
+  --color-accent: #0078d4;              /* Azul de acento (estilo Windows) */
+  --color-accent-hover: #1a86d9;        /* Hover del acento */
+  --color-selection: rgba(0, 120, 212, 0.3); /* Selección de iconos */
+  
+  /* Colores de botones de ventana */
+  --color-close-hover: #e81123;         /* Botón cerrar hover */
+  --color-minimize-hover: rgba(255, 255, 255, 0.1); /* Botón minimizar hover */
+  
+  /* Fuentes */
+  --font-system: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Tamaños */
+  --taskbar-height: 48px;               /* Altura de la barra de tareas */
+  --icon-size: 48px;                    /* Tamaño de iconos del escritorio */
+  --window-radius: 8px;                 /* Bordes redondeados de ventanas */
+  --start-menu-width: 300px;            /* Ancho del menú de inicio */
+  
+  /* Transiciones */
+  --transition-fast: 0.15s ease;        /* Transición rápida */
+  --transition-normal: 0.2s ease;       /* Transición normal */
+  --transition-slow: 0.3s ease;         /* Transición lenta */
+  
+  /* Sombras */
+  --shadow-window: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-taskbar: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-menu: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   2. RESET Y ESTILOS BASE
+   Normaliza estilos y establece defaults
+   ============================================ */
+
+/* Reset básico */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos del documento */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-system);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  overflow: hidden; /* Evita scroll en el escritorio */
+  user-select: none; /* Evita selección de texto accidental */
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Eliminar estilos de enlaces */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Eliminar estilos de listas */
+ul, ol {
+  list-style: none;
+}
+
+/* Imágenes responsivas */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   3. ESCRITORIO (DESKTOP) - Elemento <main>
+   ============================================
+   
+   El escritorio usa <main> como elemento semántico
+   porque representa el contenido principal de la
+   aplicación. El role="application" indica que es
+   una aplicación interactiva, no solo lectura.
+   ============================================ */
+
+/* 
+ * Contenedor del escritorio completo
+ * Selector: .desktop (aplicado a <main>)
+ * 
+ * Establece el fondo de pantalla y dimensiones
+ * completas de la ventana del navegador.
+ */
+.desktop {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  /* Imagen de fondo del escritorio */
+  background-image: url('../images/wallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Color de respaldo si no carga la imagen */
+  background-color: #1a1a2e;
+}
+
+/* 
+ * Área de iconos del escritorio
+ * Selector: .desktop__icons (aplicado a <section>)
+ * 
+ * Usamos <section> porque es un grupo temático
+ * de contenido relacionado (todos los accesos directos).
+ * Usa CSS Grid para organizar los iconos en columnas.
+ */
+.desktop__icons {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  /* Grid para organizar iconos */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 90px);
+  grid-auto-rows: 90px;
+  gap: 8px;
+  /* Limitar altura para no superponerse con taskbar */
+  max-height: calc(100vh - var(--taskbar-height) - 32px);
+  overflow: hidden;
+}
+
+/* ============================================
+   4. ICONOS DEL ESCRITORIO - Elemento <figure>
+   ============================================
+   
+   Cada icono del escritorio usa <figure> con
+   <figcaption> porque representa una unidad de
+   contenido autocontenido (imagen + etiqueta).
+   
+   Estructura semántica:
+   <figure class="desktop-icon">
+     <img> (aria-hidden ya que es decorativo)
+     <figcaption> (nombre del icono)
+   </figure>
+   ============================================ */
+
+/* 
+ * Contenedor individual de cada icono
+ * Selector: .desktop-icon (aplicado a <figure>)
+ * 
+ * Flexbox vertical para apilar imagen y texto.
+ * tabindex="0" permite navegación por teclado.
+ */
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px;
+  width: 80px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+/* Hover sobre icono */
+.desktop-icon:hover {
+  background-color: var(--color-selection);
+}
+
+/* Icono seleccionado */
+.desktop-icon.selected {
+  background-color: var(--color-selection);
+  outline: 1px solid var(--color-accent);
+}
+
+/* Imagen del icono */
+.desktop-icon__image {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin-bottom: 4px;
+  /* Suavizar imágenes de iconos */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* 
+ * Texto/nombre del icono
+ * Selector: .desktop-icon__name (aplicado a <figcaption>)
+ * 
+ * <figcaption> es el elemento semántico correcto
+ * para proporcionar una leyenda/etiqueta a la figura.
+ * Incluye text-shadow para legibilidad sobre cualquier fondo.
+ */
+.desktop-icon__name {
+  font-size: 11px;
+  text-align: center;
+  color: var(--color-text-primary);
+  /* Sombra para legibilidad sobre cualquier fondo */
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    -1px -1px 2px rgba(0, 0, 0, 0.8);
+  /* Limitar a 2 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  max-width: 70px;
+  line-height: 1.3;
+}
+
+/* ============================================
+   5. BARRA DE TAREAS (TASKBAR) - Elemento <footer>
+   ============================================
+   
+   La barra de tareas usa <footer> porque es el
+   pie de página persistente de la aplicación.
+   Contiene navegación (apps) e información de estado.
+   
+   Estructura semántica:
+   <footer class="taskbar" role="toolbar">
+     <div> (botón inicio)
+     <nav> (apps en ejecución)
+     <aside> (bandeja del sistema)
+   </footer>
+   ============================================ */
+
+/* 
+ * Contenedor principal de la barra de tareas
+ * Selector: .taskbar (aplicado a <footer>)
+ * 
+ * Posición fija en la parte inferior de la pantalla.
+ * Usa flexbox para distribuir sus tres secciones.
+ */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--taskbar-height);
+  background-color: var(--color-taskbar);
+  /* Efecto de desenfoque (glassmorphism) */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  z-index: 1000; /* Siempre encima de ventanas */
+  box-shadow: var(--shadow-taskbar);
+}
+
+/* Sección izquierda (botón inicio) */
+.taskbar__left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 
+ * Sección central (aplicaciones abiertas)
+ * Selector: .taskbar__center (aplicado a <nav>)
+ * 
+ * Usamos <nav> porque contiene navegación hacia
+ * las diferentes ventanas/aplicaciones abiertas.
+ */
+.taskbar__center {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+}
+
+/* 
+ * Sección derecha (bandeja del sistema)
+ * Selector: .taskbar__right (aplicado a <aside>)
+ * 
+ * Usamos <aside> porque es contenido complementario
+ * al contenido principal (indicadores de estado).
+ */
+.taskbar__right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Botón de inicio (Start) */
+.start-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.start-button:hover {
+  background-color: var(--color-taskbar-hover);
+}
+
+/* Icono del botón de inicio */
+.start-button__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Ítem de aplicación en la barra de tareas */
+.taskbar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--transition-fast);
+}
+
+.taskbar-item:hover {
+  background-color: var(--color-taskbar-hover);
+}
+
+/* Indicador de aplicación activa */
+.taskbar-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+}
+
+/* Icono de aplicación en taskbar */
+.taskbar-item__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   BANDEJA DEL SISTEMA (SYSTEM TRAY)
+   Iconos de estado y reloj
+   ============================================ */
+
+/* Contenedor de la bandeja del sistema */
+.system-tray {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast);
+}
+
+.system-tray:hover {
+  background-color: var(--color-taskbar-hover);
+}
+
+/* Iconos de la bandeja */
+.system-tray__icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.system-tray__icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+/* 
+ * Reloj del sistema
+ * Selector: .system-tray__clock
+ * 
+ * Contiene elementos <time> que son semánticamente
+ * correctos para representar fechas y horas.
+ * aria-live="polite" anuncia cambios a lectores de pantalla.
+ */
+.system-tray__clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.system-tray__time {
+  color: var(--color-text-primary);
+}
+
+.system-tray__date {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+
+/* ============================================
+   6. MENÚ DE INICIO (START MENU) - Elemento <aside>
+   ============================================
+   
+   El menú de inicio usa <aside> porque es contenido
+   complementario que aparece sobre el contenido
+   principal. Es un panel flotante independiente.
+   
+   Estructura semántica:
+   <aside class="start-menu" role="menu">
+     <header> (búsqueda)
+     <nav> (navegación de apps)
+       <section> (grupo: Pinned/Recommended)
+         <h2> (título de sección)
+         <ul><li><a> (lista de apps)
+   </aside>
+   ============================================ */
+
+/* 
+ * Contenedor del menú de inicio
+ * Selector: .start-menu (aplicado a <aside>)
+ * 
+ * Posición fija sobre la barra de tareas.
+ * Oculto por defecto, se muestra con clase .open
+ */
+.start-menu {
+  position: fixed;
+  bottom: calc(var(--taskbar-height) + 8px);
+  left: 8px;
+  width: var(--start-menu-width);
+  max-height: 500px;
+  background-color: var(--color-start-menu);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--window-radius);
+  box-shadow: var(--shadow-menu);
+  border: 1px solid var(--color-window-border);
+  z-index: 1001;
+  /* Oculto por defecto */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: 
+    opacity var(--transition-normal),
+    visibility var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+/* Menú de inicio visible */
+.start-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 
+ * Cabecera del menú
+ * Selector: .start-menu__header (aplicado a <header>)
+ * 
+ * Usamos <header> porque contiene contenido
+ * introductorio del menú (campo de búsqueda).
+ */
+.start-menu__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-window-border);
+}
+
+/* Campo de búsqueda */
+.start-menu__search {
+  width: 100%;
+  padding: 10px 16px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-window-border);
+  border-radius: 20px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.start-menu__search::placeholder {
+  color: var(--color-text-muted);
+}
+
+.start-menu__search:focus {
+  border-color: var(--color-accent);
+}
+
+/* 
+ * Lista de aplicaciones en el menú
+ * Selector: .start-menu__apps (aplicado a <nav>)
+ * 
+ * Usamos <nav> porque es navegación hacia
+ * diferentes aplicaciones del sistema.
+ * Contiene <section> para cada grupo de apps.
+ */
+.start-menu__apps {
+  padding: 8px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+/* Título de sección en el menú */
+.start-menu__section-title {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  padding: 8px 12px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 
+ * Ítem de aplicación en el menú
+ * Selector: .start-menu__item (aplicado a <a>)
+ * 
+ * Cada app es un enlace <a> dentro de <li>.
+ * role="menuitem" indica su función en el menú.
+ */
+.start-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.start-menu__item:hover {
+  background-color: var(--color-taskbar-hover);
+}
+
+/* 
+ * Lista de apps en el menú
+ * Selector: .start-menu__list (aplicado a <ul>)
+ * 
+ * Lista semántica de aplicaciones con role="menu".
+ * Los <li> usan role="none" para que los <a> sean
+ * los elementos de menú accesibles.
+ */
+.start-menu__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 
+ * Sección del menú (Pinned, Recommended)
+ * Selector: .start-menu__section (aplicado a <section>)
+ * 
+ * Agrupa apps relacionadas con su propio heading <h2>.
+ */
+.start-menu__section {
+  margin-bottom: 8px;
+}
+
+/* Icono de app en el menú */
+.start-menu__item-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Nombre de app en el menú */
+.start-menu__item-name {
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   7. VENTANAS (WINDOWS) - Elemento <article>
+   ============================================
+   
+   Cada ventana usa <article> porque representa
+   una unidad de contenido independiente y
+   autocontenido que podría existir por sí sola.
+   
+   Estructura semántica:
+   <article class="window" role="dialog">
+     <header> (barra de título con h1)
+     <nav> (barra de herramientas/navegación)
+     <div> (contenido)
+       <aside> (sidebar)
+       <section> (área de archivos)
+   </article>
+   ============================================ */
+
+/* 
+ * Contenedor de una ventana
+ * Selector: .window (aplicado a <article>)
+ * 
+ * role="dialog" indica que es una ventana modal.
+ * aria-labelledby apunta al h1 del título.
+ */
+.window {
+  position: absolute;
+  min-width: 400px;
+  min-height: 300px;
+  background-color: var(--color-window-bg);
+  border: 1px solid var(--color-window-border);
+  border-radius: var(--window-radius);
+  box-shadow: var(--shadow-window);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Posición inicial */
+  top: 50px;
+  left: 100px;
+  width: 700px;
+  height: 500px;
+  /* Oculto por defecto */
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transition: 
+    opacity var(--transition-fast),
+    visibility var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* Ventana visible */
+.window.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+/* Ventana maximizada */
+.window.maximized {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - var(--taskbar-height)) !important;
+  border-radius: 0;
+}
+
+/* 
+ * Barra de título de la ventana
+ * Selector: .window__titlebar (aplicado a <header>)
+ * 
+ * Usamos <header> porque contiene información
+ * introductoria de la ventana (icono, título, controles).
+ * El título usa <h1> ya que es el heading del article.
+ */
+.window__titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 4px 0 12px;
+  background-color: var(--color-titlebar);
+  /* Permitir arrastrar la ventana */
+  cursor: default;
+}
+
+/* Sección izquierda de la barra de título */
+.window__titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icono de la aplicación en la barra de título */
+.window__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* 
+ * Título de la ventana
+ * Selector: .window__title (aplicado a <h1>)
+ * 
+ * Usamos <h1> dentro del <article> de la ventana.
+ * Cada article tiene su propia jerarquía de headings.
+ * El estilo es pequeño para integrarse en la barra de título.
+ */
+.window__title {
+  font-size: 12px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Contenedor de botones de control */
+.window__controls {
+  display: flex;
+  align-items: center;
+}
+
+/* Botón de control de ventana (minimizar, maximizar, cerrar) */
+.window__control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.window__control-btn:hover {
+  background-color: var(--color-minimize-hover);
+}
+
+/* Botón de cerrar con hover rojo */
+.window__control-btn--close:hover {
+  background-color: var(--color-close-hover);
+}
+
+/* Iconos de los botones de control */
+.window__control-btn svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* Contenido de la ventana */
+.window__content {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--color-window-bg);
+}
+
+/* ============================================
+   EXPLORADOR DE ARCHIVOS
+   Estilos específicos para el explorador
+   ============================================
+   
+   El explorador usa elementos semánticos:
+   - <nav> para la barra de herramientas/navegación
+   - <aside> para el sidebar de accesos rápidos
+   - <section> para el área de archivos
+   - <article> para cada archivo/carpeta individual
+   ============================================ */
+
+/* 
+ * Barra de herramientas del explorador
+ * Selector: .explorer-toolbar (aplicado a <nav>)
+ * 
+ * Usamos <nav> porque contiene navegación
+ * (botones atrás, adelante, subir) y breadcrumb.
+ */
+.explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--color-titlebar);
+  border-bottom: 1px solid var(--color-window-border);
+}
+
+/* Barra de navegación (back, forward, up) */
+.explorer-toolbar__nav {
+  display: flex;
+  gap: 4px;
+}
+
+/* Botón de navegación */
+.explorer-toolbar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.explorer-toolbar__btn:hover {
+  background-color: var(--color-taskbar-hover);
+  color: var(--color-text-primary);
+}
+
+.explorer-toolbar__btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Barra de dirección */
+.explorer-toolbar__address {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-window-border);
+  border-radius: 4px;
+}
+
+.explorer-toolbar__address-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.explorer-toolbar__address-text {
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+/* Contenido del explorador */
+.explorer-content {
+  display: flex;
+  height: 100%;
+}
+
+/* 
+ * Panel lateral del explorador
+ * Selector: .explorer-sidebar (aplicado a <aside>)
+ * 
+ * Usamos <aside> porque es contenido relacionado
+ * pero secundario/complementario al contenido
+ * principal (los archivos). Contiene <nav> interno
+ * para los enlaces de navegación rápida.
+ */
+.explorer-sidebar {
+  width: 200px;
+  padding: 8px;
+  border-right: 1px solid var(--color-window-border);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 
+ * Navegación del sidebar
+ * Selector: .explorer-sidebar__nav (aplicado a <nav>)
+ * 
+ * Contenedor de enlaces de navegación dentro del sidebar.
+ */
+.explorer-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 
+ * Ítem del panel lateral
+ * Selector: .explorer-sidebar__item (aplicado a <a>)
+ * 
+ * Cada item es un enlace <a> que navega a una
+ * ubicación del sistema de archivos. El item activo
+ * usa aria-current="location" para accesibilidad.
+ */
+.explorer-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.explorer-sidebar__item:hover {
+  background-color: var(--color-taskbar-hover);
+}
+
+.explorer-sidebar__item.active {
+  background-color: var(--color-selection);
+}
+
+.explorer-sidebar__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.explorer-sidebar__text {
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+/* 
+ * Área principal de archivos
+ * Selector: .explorer-files (aplicado a <section>)
+ * 
+ * Usamos <section> porque es un grupo temático
+ * de contenido relacionado (archivos y carpetas).
+ * Usa CSS Grid para organizar los items.
+ */
+.explorer-files {
+  flex: 1;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-auto-rows: 90px;
+  gap: 8px;
+  align-content: start;
+}
+
+/* 
+ * Ítem de archivo/carpeta
+ * Selector: .file-item (aplicado a <article>)
+ * 
+ * Cada archivo/carpeta usa <article> porque es
+ * una unidad de contenido independiente que
+ * representa un elemento del sistema de archivos.
+ * tabindex="0" permite navegación por teclado.
+ */
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.file-item:hover {
+  background-color: var(--color-selection);
+}
+
+.file-item__icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 4px;
+}
+
+.file-item__name {
+  font-size: 11px;
+  text-align: center;
+  color: var(--color-text-primary);
+  word-break: break-word;
+  max-width: 70px;
+  line-height: 1.3;
+}
+
+/* ============================================
+   8. UTILIDADES Y ANIMACIONES
+   Clases de ayuda y efectos
+   ============================================ */
+
+/* Ocultar elementos visualmente pero accesibles */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación de desaparición */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Efecto de parpadeo para cursor */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   Ajustes para diferentes tamaños de pantalla
+   ============================================ */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
+  .desktop__icons {
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-auto-rows: 80px;
+  }
+  
+  .window {
+    min-width: 300px;
+    width: 90vw !important;
+    left: 5vw !important;
+  }
+  
+  .explorer-sidebar {
+    width: 150px;
+  }
+  
+  .start-menu {
+    width: 280px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .taskbar__center {
+    display: none;
+  }
+  
+  .start-menu {
+    width: calc(100vw - 16px);
+    left: 8px;
+    right: 8px;
+  }
+  
+  .window {
+    width: 100vw !important;
+    height: calc(100vh - var(--taskbar-height)) !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 0;
+  }
+  
+  .explorer-sidebar {
+    display: none;
+  }
+}
